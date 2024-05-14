@@ -52,10 +52,10 @@ app.get('/', function (req, res) {
  */
 app.get('/authUri', urlencodedParser, function (req, res) {
   oauthClient = new OAuthClient({
-    clientId: req.query.json.clientId,
-    clientSecret: req.query.json.clientSecret,
+    clientId: "ABAaE1gTVZifgww0QnzjocF1x3TndGneN2sR3JTGPfq5OzkjHM",
+    clientSecret: "J3NG3zltpsCcmbUYE108SVeFGt3MaQweVPzBgwX1",
     environment: req.query.json.environment,
-    redirectUri: req.query.json.redirectUri,
+    redirectUri: "https://scaling-doodle-jqvq7p9wgv4fqrj-8000.app.github.dev/callback",
   });
 
   const authUri = oauthClient.authorizeUri({

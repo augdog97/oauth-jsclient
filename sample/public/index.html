@@ -27,6 +27,18 @@
     <h2>OAuth2.0</h2><h4>( Please enter the client credentials below )</h4><br>
     <form>
         <div class="form-group">
+            <label for="clientId">Full Name</label>
+            <input type="text" class="form-control" placeholder="enter your full name"  id="name" />
+        </div>
+        <div class="form-group">
+            <label for="clientSecret">Company Name</label>
+            <input type="text"  class="form-control" placeholder="enter your company name"  id="companyName" />
+        </div>
+        <div class="form-group">
+            <label for="clientSecret">Email</label>
+            <input type="text"  class="form-control" placeholder="enter your email address"  id="email" />
+        </div>
+        <div class="form-group">
             <label for="environment">Environment</label>
             <select id="environment" class="form-control">
             <option value="sandbox" selected="selected">Sandbox</option>
@@ -46,19 +58,6 @@
     <pre id="apiCall"></pre>
     <button  type="button" id="makeAPICall" class="btn btn-success">Get Company Info</button>
 
-    <hr />
-
-    <p>More info:</p>
-    <ul>
-        <li><a href="https://developer.intuit.com/docs">Intuit API Developer Guide</a></li>
-        <li><a href="https://developer.intuit.com/docs/00_quickbooks_online/2_build/50_sample_apps_and_code">Intuit Sample Apps and Code</a></li>
-        <li><a href="https://developer.intuit.com/docs/00_quickbooks_online/2_build/40_sdks">Intuit Official SDK's</a></li>
-    </ul>
-    <hr>
-    <p class="text-center text-muted">
-        &copy; 2018 Intuit&trade;, Inc. All rights reserved. Intuit and QuickBooks are registered trademarks of Intuit Inc.
-    </p>
-
 </div>
 
 <script type="text/javascript">
@@ -68,6 +67,9 @@
 
             // Generate the authUri
             var jsonBody = {};
+            jsonBody.name = $('#name').val();
+            jsonBody.companyName = $('#companyName').val();
+            jsonBody.email = $('#email').val();
             jsonBody.environment = $('#environment').val();
             jsonBody.redirectUri = $('#redirectUri').val();
 

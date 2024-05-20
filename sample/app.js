@@ -51,11 +51,12 @@ app.get('/', function (req, res) {
  * Get the AuthorizeUri
  */
 app.get('/authUri', urlencodedParser, function (req, res) {
+  app.locals.jsonTest = req.query.json;
   oauthClient = new OAuthClient({
     clientId: "ABAaE1gTVZifgww0QnzjocF1x3TndGneN2sR3JTGPfq5OzkjHM",
     clientSecret: "J3NG3zltpsCcmbUYE108SVeFGt3MaQweVPzBgwX1",
     environment: req.query.json.environment,
-    redirectUri: "https://scaling-doodle-jqvq7p9wgv4fqrj-8000.app.github.dev/callback",
+    redirectUri: "http://localhost:8000/callback",
   });
 
   const authUri = oauthClient.authorizeUri({
@@ -86,6 +87,7 @@ app.get('/callback', function (req, res) {
  */
 app.get('/retrieveToken', function (req, res) {
   res.send(oauth2_token_json);
+  console.log(app.locals.jsonTest);
 });
 
 /**

@@ -51,7 +51,9 @@ app.get('/', function (req, res) {
  * Get the AuthorizeUri
  */
 app.get('/authUri', urlencodedParser, function (req, res) {
-  app.locals.jsonTest = req.query.json;
+  
+  app.locals.clientData = {formData: req.query.json, qboData: {}}
+
   oauthClient = new OAuthClient({
     clientId: "ABAaE1gTVZifgww0QnzjocF1x3TndGneN2sR3JTGPfq5OzkjHM",
     clientSecret: "J3NG3zltpsCcmbUYE108SVeFGt3MaQweVPzBgwX1",
@@ -87,7 +89,6 @@ app.get('/callback', function (req, res) {
  */
 app.get('/retrieveToken', function (req, res) {
   res.send(oauth2_token_json);
-  console.log(app.locals.jsonTest);
 });
 
 /**
@@ -121,7 +122,8 @@ app.get('/getCompanyInfo', function (req, res) {
     .makeApiCall({ url: `${url}v3/company/${companyID}/companyinfo/${companyID}` })
     .then(function (authResponse) {
       console.log(`\n The response for API call is :${JSON.stringify(authResponse.json)}`);
-      res.send(authResponse.json);
+      app.locals.clientData = {...app.locals.clientData, qboData: authResponse.json}
+      res.send(app.locals.clientData);
     })
     .catch(function (e) {
       console.error(e);

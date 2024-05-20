@@ -57,7 +57,6 @@
     <p>If there is no access token or the access token is invalid, click either the <b>Connect to QucikBooks</b> or <b>Sign with Intuit</b> button above.</p>
     <pre id="apiCall"></pre>
     <button  type="button" id="makeAPICall" class="btn btn-success">Get Company Info</button>
-
 </div>
 
 <script type="text/javascript">
@@ -112,13 +111,19 @@
                 $("#accessToken").html(token);
             });
         }
+     
 
         function makeAPICall() {
 
             // Generate the authUri
             $.get('/getCompanyInfo', function (response) {
                 $("#apiCall").html(JSON.stringify(response, null, 4));
+                //sends full client data to zapier
+                $.get('https://hooks.zapier.com/hooks/catch/12834878/3v5blks/', {json:response}, function (uri) {
+                console.log('Sent Data to Zapier');
+            });    
             });
+            
         }
 
         document.getElementById('authorizeUri').addEventListener('click', function response(e) {

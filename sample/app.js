@@ -52,7 +52,7 @@ app.get('/', function (req, res) {
  */
 app.get('/authUri', urlencodedParser, function (req, res) {
   
-  app.locals.clientData = {formData: req.query.json, qboData: {}}
+  app.locals.clientData = {formData: req.query.json}
 
   oauthClient = new OAuthClient({
     clientId: "ABAaE1gTVZifgww0QnzjocF1x3TndGneN2sR3JTGPfq5OzkjHM",
@@ -112,6 +112,7 @@ app.get('/refreshAccessToken', function (req, res) {
  */
 app.get('/getCompanyInfo', function (req, res) {
   const companyID = oauthClient.getToken().realmId;
+  app.locals.startDate = '';
 
   const url =
     oauthClient.environment == 'sandbox'
@@ -121,8 +122,33 @@ app.get('/getCompanyInfo', function (req, res) {
   oauthClient
     .makeApiCall({ url: `${url}v3/company/${companyID}/companyinfo/${companyID}` })
     .then(function (authResponse) {
-      console.log(`\n The response for API call is :${JSON.stringify(authResponse.json)}`);
-      app.locals.clientData = {...app.locals.clientData, qboData: authResponse.json}
+      console.log(`\n The response for API call is :${JSON.stringify(authResponse.json.CompanyInfo.CompanyStartDate)}`);
+      app.locals.clientData = {...app.locals.clientData, companyData: authResponse.json}
+      app.locals.startDate = authResponse.json.CompanyInfo.CompanyStartDate;
+    })
+
+    .catch(function (e) {
+      console.error(e);
+    });
+    /* --------------------------------------------------------------------------------------------*/
+    
+    const body = {
+      start_duedate: app.locals.startDate
+    };
+    
+    oauthClient
+    .makeApiCall({
+      url: `${url}v3/company/${companyID}/reports/AgedReceivableDetail`,
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+    .then(function (arResponse) {
+     // console.log(`\n The response for API call is :${JSON.stringify(arResponse.json)}`);
+      app.locals.clientData = {...app.locals.clientData, ARData: arResponse.json}
+      console.log(app.locals.startDate);
       res.send(app.locals.clientData);
     })
     .catch(function (e) {

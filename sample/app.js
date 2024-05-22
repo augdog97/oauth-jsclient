@@ -51,13 +51,15 @@ app.get('/', function (req, res) {
  * Get the AuthorizeUri
  */
 app.get('/authUri', urlencodedParser, function (req, res) {
-  
+  // this is wrapped in an `async` function
+// you can use await throughout the function
+
   app.locals.clientData = {formData: req.query.json}
 
   oauthClient = new OAuthClient({
     clientId: "ABAaE1gTVZifgww0QnzjocF1x3TndGneN2sR3JTGPfq5OzkjHM",
     clientSecret: "J3NG3zltpsCcmbUYE108SVeFGt3MaQweVPzBgwX1",
-    environment: req.query.json.environment,
+    environment: 'sandbox',
     redirectUri: "http://localhost:8000/callback",
   });
 
@@ -114,6 +116,52 @@ app.get('/getCompanyInfo', function (req, res) {
   const companyID = oauthClient.getToken().realmId;
   app.locals.startDate = '';
 
+  function calculateYearDifference(startDate, endDate) {
+    // Parse the input dates
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+  
+    if (isNaN(start) || isNaN(end)) {
+      throw new Error('Invalid date format. Please use YYYY-MM-DD.');
+    }
+  
+    // Calculate the difference in full years
+    let yearDifference = end.getFullYear() - start.getFullYear();
+  
+    // Calculate the difference in months and days
+    let monthDifference = end.getMonth() - start.getMonth();
+    let dayDifference = end.getDate() - start.getDate();
+  
+    // Adjust for incomplete years
+    if (monthDifference < 0 || (monthDifference === 0 && dayDifference < 0)) {
+      yearDifference--;
+      monthDifference += 12;
+    }
+  
+    // If days are negative, adjust the month difference
+    if (dayDifference < 0) {
+      monthDifference--;
+      dayDifference += new Date(end.getFullYear(), end.getMonth(), 0).getDate();
+    }
+  
+    // Convert the month and day differences to a fraction of a year
+    const fractionalYear = monthDifference / 12 + dayDifference / 365;
+  
+    const totalYears = yearDifference + fractionalYear;
+  
+    return totalYears;
+  }
+  
+  function getCurrentDate() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-based, so add 1
+    const day = String(now.getDate()).padStart(2, '0');
+  
+    return `${year}-${month}-${day}`;
+  }
+  
+
   const url =
     oauthClient.environment == 'sandbox'
       ? OAuthClient.environment.sandbox
@@ -122,7 +170,7 @@ app.get('/getCompanyInfo', function (req, res) {
   oauthClient
     .makeApiCall({ url: `${url}v3/company/${companyID}/companyinfo/${companyID}` })
     .then(function (authResponse) {
-      console.log(`\n The response for API call is :${JSON.stringify(authResponse.json.CompanyInfo.CompanyStartDate)}`);
+      //console.log(`\n The response for API call is :${JSON.stringify(authResponse.json.CompanyInfo.CompanyStartDate)}`);
       app.locals.clientData = {...app.locals.clientData, companyData: authResponse.json}
       app.locals.startDate = authResponse.json.CompanyInfo.CompanyStartDate;
     })
@@ -147,13 +195,29 @@ app.get('/getCompanyInfo', function (req, res) {
     })
     .then(function (arResponse) {
      // console.log(`\n The response for API call is :${JSON.stringify(arResponse.json)}`);
-      app.locals.clientData = {...app.locals.clientData, ARData: arResponse.json}
-      console.log(app.locals.startDate);
+     //console.log(app.locals.startDate);
+
+     // Get years in business for Business stability metric:
+    const startDate = app.locals.startDate;
+    const endDate = getCurrentDate(); // Get the current date in YYYY-MM-DD format
+    
+    try {
+      const yearsBetween = calculateYearDifference(startDate, endDate);
+      app.locals.clientData = {...app.locals.clientData, ARData: arResponse.json, TimeInBusiness:yearsBetween}
       res.send(app.locals.clientData);
+      console.log(`The number of years between ${startDate} and ${endDate} is ${yearsBetween} years.`);
+    } catch (error) {
+      console.error(error.message);
+    }
+     
     })
     .catch(function (e) {
       console.error(e);
     });
+
+   
+    
+    
 });
 
 /**

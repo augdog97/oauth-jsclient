@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <link rel="apple-touch-icon icon shortcut" type="image/png" href="https://plugin.intuitcdn.net/sbg-web-shell-ui/6.3.0/shell/harmony/images/QBOlogo.png">
+    <link rel="apple-touch-icon icon shortcut" type="image/png"
+        href="https://plugin.intuitcdn.net/sbg-web-shell-ui/6.3.0/shell/harmony/images/QBOlogo.png">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
@@ -10,143 +12,233 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 </head>
+
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <h1>
-        <a href="http://developer.intuit.com">
-            <img src="./images/quickbooks_logo_horz.png" id="headerLogo">
-        </a>
-    </h1>
-    <hr>
-    <div class="well text-center">
-        <h1>intuit-nodejsclient sample application</h1>
-        <br>
+        <h1>
+            <a href="http://developer.intuit.com">
+                <img src="./images/quickbooks_logo_horz.png" id="headerLogo">
+            </a>
+        </h1>
+        <hr>
+        <div class="well text-center">
+            <h1>AR Insurance Scoring Matrix Application</h1>
+            <br>
+        </div>
+        <h4>Step 1</h4>
+        <form>
+            <div class="form-group">
+                <label for="clientId">Full Name</label>
+                <input type="text" class="form-control" placeholder="enter your full name" id="name" />
+            </div>
+            <div class="form-group">
+                <label for="clientSecret">Company Name</label>
+                <input type="text" class="form-control" placeholder="enter your company name" id="companyName" />
+            </div>
+            <div class="form-group">
+                <label for="clientSecret">Email</label>
+                <input type="text" class="form-control" placeholder="enter your email address" id="email" />
+            </div>
+            <div class="form-group">
+                <label for="clientSecret">Credit Score</label>
+                <input type="text" class="form-control" placeholder="enter your most recent credit score"
+                    id="creditScore" />
+            </div>
+            <div class="form-group">
+                <label for="clientSecret">Active Clients</label>
+                <input type="text" class="form-control" placeholder="enter the number of active Clients"
+                    id="activeClients" />
+            </div>
+            <div class="form-group">
+                <label for="clientSecret">Historical Claims</label>
+                <input type="text" class="form-control" placeholder="enter the number of claims made"
+                    id="claims" />
+            </div>
+            <div class="form-group">
+                <label for="industry">Business Industry</label>
+                <select id="industry" class="form-control">
+                    <option value="Accounting and Bookkeeping" selected="selected">Accounting and Bookkeeping</option>
+                    <option value="Advertising and Public Relations">Advertising and Public Relations</option>
+                    <option value="Agriculture, Ranching, and Farming">Agriculture, Ranching, and Farming</option>
+                    <option value="Art, Writing, and Photography">Art, Writing, and Photography</option>
+                    <option value="Automotive Sales and Repair">Automotive Sales and Repair</option>
+                    <option value="Church and Religious Organizations">Church and Religious Organizations</option>
+                    <option value="Construction General Contractors">Construction General Contractors</option>
+                    <option value="Construction Trades such as Plumbers, Electricians, HVAC">Construction Trades such as
+                        Plumbers, Electricians, HVAC</option>
+                    <option value="Design, Architecture and Engineering">Design, Architecture and Engineering</option>
+                    <option value="Financial Services other than Bookkeeping and Accounting">Financial Services other
+                        than Bookkeeping and Accounting</option>
+                    <option value="General Product-based Business">General Product-based Business</option>
+                    <option value="General Service-based Business">General Service-based Business</option>
+                    <option value="Hair Salons, Beauty Salons, and Barber Shops">Hair Salons, Beauty Salons, and Barber
+                        Shops</option>
+                    <option value="Information Technology">Information Technology</option>
+                    <option value="Insurance Agency and Brokers">Insurance Agency and Brokers</option>
+                    <option value="Lawn Care and Landscaping">Lawn Care and Landscaping</option>
+                    <option value="Legal Services">Legal Services</option>
+                    <option value="Lodging, such as Hotels and Motels">Lodging, such as Hotels and Motels</option>
+                    <option value="Manufacturer Representatives and Agents">Manufacturer Representatives and Agents
+                    </option>
+                    <option value="Manufacturing">Manufacturing</option>
+                    <option value="Medical, Dental, and Health Services">Medical, Dental, and Health Services</option>
+                    <option value="Non-Profit">Non-Profit</option>
+                    <option value="Property Management and Home Associations">Property Management and Home Associations
+                    </option>
+                    <option value="Rental Residential for Real Estate Investors">Rental Residential for Real Estate
+                        Investors</option>
+                    <option value="Repair and Maintenance">Repair and Maintenance</option>
+                    <option value="Restaurants, Caterers, and Bars">Restaurants, Caterers, and Bars</option>
+                    <option value="Retail Shops and Online Commerce">Retail Shops and Online Commerce</option>
+                    <option value="Sales: Independent Agents">Sales: Independent Agents</option>
+                    <option value="Transportation, Trucking, and Delivery">Transportation, Trucking, and Delivery
+                    </option>
+                    <option value="Wholesale Distribution and Sales">Wholesale Distribution and Sales</option>
+                    <option value="Vacation Rental for Property Management">Vacation Rental for Property Management
+                    </option>
+
+                </select>
+            </div>
+        </form>
+        <p>Now click the <b>Connect to QuickBooks</b> button below.</p>
+        <pre id="accessToken"></pre>
+        <a class="imgLink" href="#" id="authorizeUri"><img src="./images/C2QB_green_btn_lg_default.png"
+                width="178" /></a>
+        <button type="button" id="retrieveToken" class="btn btn-success">Display Access Token</button>
+        <button type="button" id="refreshToken" class="btn btn-success">Refresh Token</button>
+        <hr />
+
+        <h2>Make an API call</h2>
+        <h4>( Please refer to our <a target="_balnk"
+                href="https://developer.intuit.com/v2/apiexplorer?apiname=V3QBO#?id=Account">API Explorer</a> )</h4>
+        <p>If there is no access token or the access token is invalid, click either the <b>Connect to QucikBooks</b> or
+            <b>Sign with Intuit</b> button above.</p>
+        <pre id="apiCall"></pre>
+        <button type="button" id="makeAPICall" class="btn btn-success">Get Company Info</button>
+        <h4>Step 2</h4>
+        <button type="button" id="makeZapierCall" class="btn btn-success">Send Data to Zapier</button>
     </div>
-    <h2>OAuth2.0</h2><h4>( Please enter the client credentials below )</h4><br>
-    <form>
-        <div class="form-group">
-            <label for="clientId">Full Name</label>
-            <input type="text" class="form-control" placeholder="enter your full name"  id="name" />
-        </div>
-        <div class="form-group">
-            <label for="clientSecret">Company Name</label>
-            <input type="text"  class="form-control" placeholder="enter your company name"  id="companyName" />
-        </div>
-        <div class="form-group">
-            <label for="clientSecret">Email</label>
-            <input type="text"  class="form-control" placeholder="enter your email address"  id="email" />
-        </div>
-        <div class="form-group">
-            <label for="environment">Environment</label>
-            <select id="environment" class="form-control">
-            <option value="sandbox" selected="selected">Sandbox</option>
-            <option value="production">Production</option>
-            </select>
-        </div>
-    </form>
-    <p>Now click the <b>Connect to QuickBooks</b> button below.</p>
-    <pre id="accessToken"></pre>
-    <a class="imgLink" href="#" id="authorizeUri" ><img src="./images/C2QB_green_btn_lg_default.png" width="178" /></a>
-    <button  type="button" id="retrieveToken" class="btn btn-success">Display Access Token</button>
-    <button  type="button" id="refreshToken" class="btn btn-success">Refresh Token</button>
-    <hr />
 
-    <h2>Make an API call</h2><h4>( Please refer to our <a target="_balnk" href="https://developer.intuit.com/v2/apiexplorer?apiname=V3QBO#?id=Account">API Explorer</a> )</h4>
-    <p>If there is no access token or the access token is invalid, click either the <b>Connect to QucikBooks</b> or <b>Sign with Intuit</b> button above.</p>
-    <pre id="apiCall"></pre>
-    <button  type="button" id="makeAPICall" class="btn btn-success">Get Company Info</button>
-</div>
+    <script type="text/javascript">
+        (function () {
 
-<script type="text/javascript">
-    (function() {
+            function authorizeUri() {
 
-        function authorizeUri() {
+                // Generate the authUri
+                var jsonBody = {};
+                jsonBody.name = $('#name').val();
+                jsonBody.companyName = $('#companyName').val();
+                jsonBody.email = $('#email').val();
+                jsonBody.creditScore = $('#creditScore').val();
+                jsonBody.activeClients = $('#activeClients').val();
+                jsonBody.claims = $('#claims').val();
+                jsonBody.industry = $('#industry').val();
+                jsonBody.redirectUri = $('#redirectUri').val();
 
-            // Generate the authUri
-            var jsonBody = {};
-            jsonBody.name = $('#name').val();
-            jsonBody.companyName = $('#companyName').val();
-            jsonBody.email = $('#email').val();
-            jsonBody.environment = $('#environment').val();
-            jsonBody.redirectUri = $('#redirectUri').val();
+                $.get('/authUri', {
+                        json: jsonBody
+                    }, function (uri) {
+                        console.log('The Auth Uris is :' + uri);
+                    })
+                    .then(function (authUri) {
+                        // Launch Popup using the JS window Object
+                        var parameters = "location=1,width=800,height=650";
+                        parameters += ",left=" + (screen.width - 800) / 2 + ",top=" + (screen.height - 650) / 2;
+                        var win = window.open(authUri, 'connectPopup', parameters);
+                        var pollOAuth = window.setInterval(function () {
+                            try {
+                                if (win.document.URL.indexOf("code") != -1) {
+                                    window.clearInterval(pollOAuth);
+                                    win.close();
+                                    //location.reload();
+                                }
+                            } catch (e) {
+                                console.log(e)
+                            }
+                        }, 100);
+                    });
+            }
 
-            $.get('/authUri', {json:jsonBody}, function (uri) {
-                console.log('The Auth Uris is :'+uri);
-            })
-            .then(function (authUri) {
-                // Launch Popup using the JS window Object
-                var parameters = "location=1,width=800,height=650";
-                parameters += ",left=" + (screen.width - 800) / 2 + ",top=" + (screen.height - 650) / 2;
-                var win = window.open(authUri, 'connectPopup', parameters);
-                var pollOAuth = window.setInterval(function () {
-                    try {
-                        if (win.document.URL.indexOf("code") != -1) {
-                            window.clearInterval(pollOAuth);
-                            win.close();
-                            location.reload();
-                        }
-                    } catch (e) {
-                        console.log(e)
-                    }
-                }, 100);
+            function retrieveToken() {
+
+                // Generate the authUri
+                $.get('/retrieveToken', function (token) {
+                    var token = (token != null) ? token :
+                        'Please Authorize Using Connect to Quickbooks first !';
+                    $("#accessToken").html(token);
+                });
+            }
+
+            function refreshToken() {
+
+                // Generate the authUri
+                $.get('/refreshAccessToken', function (token) {
+                    var token = (token != null) ? token :
+                        'Please Authorize Using Connect to Quickbooks first !';
+                    $("#accessToken").html(token);
+                });
+            }
+
+
+
+            function makeAPICall() {
+
+                // Generate the authUri
+                $.get('/getCompanyInfo', function (response) {
+                    $("#apiCall").html(JSON.stringify(response, null, 4));
+                    window.localStorage.setItem('companyData', JSON.stringify(response, null, 4));
+
+                    //     //sends full client data to zapier
+                    //     $.get('https://hooks.zapier.com/hooks/catch/12834878/3v5blks/', {json:response}, function (uri) {
+                    //     console.log('Sent Data to Zapier');
+                    // });   
+
+                });
+
+            };
+
+            function makeZapierCall() {
+                try {
+                    const companyData = window.localStorage.getItem('companyData');
+                    //sends full client data to zapier
+                          $.post('https://hooks.zapier.com/hooks/catch/12834878/3v5blks/', {json:companyData}, function (uri) {
+                        console.log('Sent Data to Zapier', companyData);
+                    }); 
+
+                } catch (error) {
+                    console.log(error)
+                }
+            };
+
+            document.getElementById('authorizeUri').addEventListener('click', function response(e) {
+                e.preventDefault();
+                authorizeUri();
             });
-        }
 
-        function retrieveToken() {
-
-            // Generate the authUri
-            $.get('/retrieveToken', function (token) {
-                var token = (token!=null) ? token : 'Please Authorize Using Connect to Quickbooks first !';
-                $("#accessToken").html(token);
+            document.getElementById('retrieveToken').addEventListener('click', function response(e) {
+                e.preventDefault();
+                retrieveToken();
             });
-        }
 
-        function refreshToken() {
-
-            // Generate the authUri
-            $.get('/refreshAccessToken', function (token) {
-                var token = (token!=null) ? token : 'Please Authorize Using Connect to Quickbooks first !';
-                $("#accessToken").html(token);
+            document.getElementById('refreshToken').addEventListener('click', function response(e) {
+                e.preventDefault();
+                refreshToken();
             });
-        }
-     
 
-        function makeAPICall() {
-
-            // Generate the authUri
-            $.get('/getCompanyInfo', function (response) {
-                $("#apiCall").html(JSON.stringify(response, null, 4));
-                //sends full client data to zapier
-                $.get('https://hooks.zapier.com/hooks/catch/12834878/3v5blks/', {json:response}, function (uri) {
-                console.log('Sent Data to Zapier');
-            });    
+            document.getElementById('makeAPICall').addEventListener('click', function response(e) {
+                e.preventDefault();
+                makeAPICall();
             });
-            
-        }
 
-        document.getElementById('authorizeUri').addEventListener('click', function response(e) {
-            e.preventDefault();
-            authorizeUri();
-        });
+            document.getElementById('makeZapierCall').addEventListener('click', function response(e) {
+                e.preventDefault();
+                makeZapierCall();
+            });
 
-        document.getElementById('retrieveToken').addEventListener('click', function response(e) {
-            e.preventDefault();
-            retrieveToken();
-        });
-
-        document.getElementById('refreshToken').addEventListener('click', function response(e) {
-            e.preventDefault();
-            refreshToken();
-        });
-
-        document.getElementById('makeAPICall').addEventListener('click', function response(e) {
-            e.preventDefault();
-            makeAPICall();
-        });
-
-    })();
-</script>
+        })();
+    </script>
 </body>
+
 </html>
